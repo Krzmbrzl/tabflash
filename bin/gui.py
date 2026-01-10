@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+import sys
+import signal
+import os
+
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "packages"))
+
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QTimer
+
+from tabflash import MainWindow
+
+
+def quit_app(*_):
+    QApplication.quit()
+
+
+def main():
+    signal.signal(signal.SIGINT, quit_app)
+
+    app = QApplication(sys.argv)
+
+    # Required to ensure that the Python interpreter is called every now
+    # and then in order to allow for signal handling (e.g. Ctrl+C)
+    # to be done.
+    # Taken from https://stackoverflow.com/a/4939113
+    timer = QTimer()
+    timer.start(500)
+    timer.timeout.connect(lambda: None)
+
+    win = MainWindow()
+
+    win.show()
+
+    sys.exit(app.exec())
+
+if __name__ == "__main__":
+    main()
