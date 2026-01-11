@@ -17,9 +17,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QComboBox,
     QFormLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QMainWindow, QMenuBar, QSizePolicy,
-    QSpacerItem, QStatusBar, QTableWidget, QTableWidgetItem,
-    QVBoxLayout, QWidget)
+    QLineEdit, QListView, QListWidget, QListWidgetItem,
+    QMainWindow, QMenuBar, QSizePolicy, QSpacerItem,
+    QStatusBar, QTableWidget, QTableWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -110,6 +111,13 @@ class Ui_MainWindow(object):
         self.table.verticalHeader().setVisible(False)
 
         self.verticalLayout.addWidget(self.table)
+
+        self.note_list = QListWidget(self.centralwidget)
+        self.note_list.setObjectName(u"note_list")
+        self.note_list.setResizeMode(QListView.ResizeMode.Adjust)
+        self.note_list.setUniformItemSizes(True)
+
+        self.verticalLayout.addWidget(self.note_list)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)

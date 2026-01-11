@@ -10,7 +10,7 @@ from typing import Optional
 import os
 from pathlib import Path
 
-from PySide6.QtWidgets import QMainWindow, QTableWidgetItem
+from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QListWidgetItem
 
 import pyexcel
 
@@ -36,6 +36,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init_state(self, base_path: Optional[str]):
         self.setWindowTitle("TabFlash")
 
+        self.note_list.setVisible(False)
+
         if base_path:
             self.base_dir_edit.setText(base_path)
 
@@ -50,7 +52,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         base = Path(path)
         files = base.glob("**/*")
-        files = [str(x.relative_to(base)) for x in files if x.is_file()]
+        files = [str(x.relative_to(base)) for x in files if x.is_file() and not x.name.startswith(".")]
 
         files.sort()
 
@@ -72,8 +74,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 / self.file_combo.itemText(file_idx)
             )
 
+            sheet_names = self.spreadsheet.sheet_names()
+
             self.sheet_combo.setEnabled(True)
-            self.sheet_combo.addItems(self.spreadsheet.sheet_names())
+
+            for current in sheet_names:
+                if current.endswith("_Notes") and all((len(x) == 1 for x in current)) and current[:-len("_Notes")] in sheet_names:
+                    # Special note sheet
+                    continue
+                
+                self.sheet_combo.addItem(current)
+
             self.sheet_combo.setCurrentIndex(0)
         except:
             pass
@@ -112,3 +123,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.table.resizeRowsToContents()
         self.table.resizeColumnsToContents()
+
+        notes_name = sheet.name + "_Notes"
+        if notes_name in self.spreadsheet.sheet_names():
+            note_sheet = self.spreadsheet.sheet_by_name(notes_name)
+
+            if all((len(x) == 1 for x in note_sheet)):
+                self.note_list.clear()
+
+                for current in note_sheet:
+                    self.note_list.addItem(QListWidgetItem(str(current[0])))
+
+                self.note_list.setVisible(True)
+        else:
+            self.note_list.setVisible(False)

@@ -136,6 +136,16 @@
       </attribute>
      </widget>
     </item>
+    <item>
+     <widget class="QListWidget" name="note_list">
+      <property name="resizeMode">
+       <enum>QListView::ResizeMode::Adjust</enum>
+      </property>
+      <property name="uniformItemSizes">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
