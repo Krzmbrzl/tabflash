@@ -129,8 +129,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for col in range(ncols):
                 self.table.setItem(row, col, QTableWidgetItem(str(rows[row][col])))
 
-        self.table.resizeRowsToContents()
+        # Note: the order is important!
+        # We first make the columns wide enough to contain the text in its full width
+        # Then we make the rows high enough to account for potential multiline content
         self.table.resizeColumnsToContents()
+        self.table.resizeRowsToContents()
 
         notes_name = sheet.name + "_Notes"
         if notes_name in self.spreadsheet.sheet_names():
