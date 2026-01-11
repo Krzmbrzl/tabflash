@@ -14,136 +14,169 @@
    <string>TabFlash</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="spacing">
+     <number>6</number>
+    </property>
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <layout class="QFormLayout" name="formLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="base_dir_label">
-          <property name="text">
-           <string>Base dir</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="base_dir_edit"/>
-        </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="mode_combo">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <property name="text">
-            <string>View</string>
-           </property>
+           <layout class="QFormLayout" name="formLayout_2">
+            <item row="0" column="0">
+             <widget class="QLabel" name="base_dir_label">
+              <property name="text">
+               <string>Base dir</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="base_dir_edit"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="mode_combo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>View</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Fill</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="mode_label">
+              <property name="text">
+               <string>Mode</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
-           <property name="text">
-            <string>Fill</string>
-           </property>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
-         </widget>
+          <item>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="file_label">
+              <property name="text">
+               <string>File</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="file_combo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="sheet_label">
+              <property name="text">
+               <string>Sheet</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="sheet_combo">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="mode_label">
-          <property name="text">
-           <string>Mode</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Policy::Preferred</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="file_label">
-          <property name="text">
-           <string>File</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="file_combo">
+        <item>
+         <widget class="QTableWidget" name="table">
           <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="sheet_label">
-          <property name="text">
-           <string>Sheet</string>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="sheet_combo">
-          <property name="enabled">
+          <attribute name="verticalHeaderVisible">
            <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+          </attribute>
          </widget>
         </item>
        </layout>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QTableWidget" name="table">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
-      </property>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-     </widget>
-    </item>
-    <item>
-     <widget class="QListWidget" name="note_list">
-      <property name="resizeMode">
-       <enum>QListView::ResizeMode::Adjust</enum>
-      </property>
-      <property name="uniformItemSizes">
-       <bool>true</bool>
-      </property>
+      </widget>
+      <widget class="QListWidget" name="note_list">
+       <property name="textElideMode">
+        <enum>Qt::TextElideMode::ElideNone</enum>
+       </property>
+       <property name="resizeMode">
+        <enum>QListView::ResizeMode::Adjust</enum>
+       </property>
+       <property name="spacing">
+        <number>3</number>
+       </property>
+       <property name="uniformItemSizes">
+        <bool>false</bool>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
