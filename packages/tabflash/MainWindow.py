@@ -15,6 +15,11 @@ from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QListWidgetItem
 import pyexcel
 
 
+def is_notes_sheet(sheet) -> bool:
+    # A notes sheet ends in '_Notes' and only contains a single column
+    return sheet.name.endswith("_Notes") and all((len(x) == 1 for x in sheet))
+
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, base_path: Optional[str] = None, parent=None):
         super().__init__(parent)
@@ -83,11 +88,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.sheet_combo.setEnabled(True)
 
             for current in sheet_names:
-                if (
-                    current.endswith("_Notes")
-                    and all((len(x) == 1 for x in current))
-                    and current[: -len("_Notes")] in sheet_names
-                ):
+                if is_notes_sheet(self.spreadsheet.sheet_by_name(current)):
                     # Special note sheet
                     continue
 
@@ -100,7 +101,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __sheet_changed(self, sheet_idx: int):
         assert self.spreadsheet is not None
 
-        sheet = self.spreadsheet.sheet_by_index(sheet_idx)
+        # Note: The index is given as if no note sheets existed. Hence, the need
+        # for this quirky looking sheet selection.
+        sheet = None
+        for current_sheet in self.spreadsheet:
+            if is_notes_sheet(current_sheet):
+                continue
+            if sheet_idx == 0:
+                sheet = current_sheet
+                break
+
+            sheet_idx -= 1
+
+        assert sheet is not None
 
         if sheet is None:
             return
@@ -139,7 +152,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if notes_name in self.spreadsheet.sheet_names():
             note_sheet = self.spreadsheet.sheet_by_name(notes_name)
 
-            if all((len(x) == 1 for x in note_sheet)):
+            if is_notes_sheet(note_sheet):
                 self.note_list.clear()
 
                 for current in note_sheet:
