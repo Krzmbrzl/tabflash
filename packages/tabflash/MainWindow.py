@@ -52,7 +52,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         base = Path(path)
         files = base.glob("**/*")
-        files = [str(x.relative_to(base)) for x in files if x.is_file() and not x.name.startswith(".")]
+        files = [
+            str(x.relative_to(base))
+            for x in files
+            if x.is_file() and not x.name.startswith(".")
+        ]
 
         files.sort()
 
@@ -79,10 +83,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.sheet_combo.setEnabled(True)
 
             for current in sheet_names:
-                if current.endswith("_Notes") and all((len(x) == 1 for x in current)) and current[:-len("_Notes")] in sheet_names:
+                if (
+                    current.endswith("_Notes")
+                    and all((len(x) == 1 for x in current))
+                    and current[: -len("_Notes")] in sheet_names
+                ):
                     # Special note sheet
                     continue
-                
+
                 self.sheet_combo.addItem(current)
 
             self.sheet_combo.setCurrentIndex(0)
