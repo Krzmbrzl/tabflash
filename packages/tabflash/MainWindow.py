@@ -77,6 +77,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sheet_combo.setEnabled(False)
         self.sheet_combo.clear()
 
+        if file_idx < 0:
+            return
+
         try:
             self.spreadsheet = pyexcel.get_book(
                 file_name=Path(self.base_dir_edit.text())
@@ -85,8 +88,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             sheet_names = self.spreadsheet.sheet_names()
 
-            self.sheet_combo.setEnabled(True)
-
             for current in sheet_names:
                 if is_notes_sheet(self.spreadsheet.sheet_by_name(current)):
                     # Special note sheet
@@ -94,11 +95,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 self.sheet_combo.addItem(current)
 
+            self.sheet_combo.setEnabled(True)
             self.sheet_combo.setCurrentIndex(0)
         except:
             pass
 
     def __sheet_changed(self, sheet_idx: int):
+        self.table.setEnabled(False)
+        self.table.clear()
+        self.note_list.setVisible(False)
+        self.note_list.clear()
+
+        if sheet_idx < 0:
+            return
+
         assert self.spreadsheet is not None
 
         # Note: The index is given as if no note sheets existed. Hence, the need
@@ -111,6 +121,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 sheet = current_sheet
                 break
 
+            assert sheet_idx > 0
             sheet_idx -= 1
 
         assert sheet is not None
@@ -159,5 +170,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.note_list.addItem(QListWidgetItem(str(current[0])))
 
                 self.note_list.setVisible(True)
-        else:
-            self.note_list.setVisible(False)
