@@ -150,6 +150,9 @@
           <property name="sizeAdjustPolicy">
            <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
           </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+          </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectionBehavior::SelectItems</enum>
           </property>
@@ -161,6 +164,9 @@
        </layout>
       </widget>
       <widget class="QListWidget" name="note_list">
+       <property name="editTriggers">
+        <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+       </property>
        <property name="textElideMode">
         <enum>Qt::TextElideMode::ElideNone</enum>
        </property>

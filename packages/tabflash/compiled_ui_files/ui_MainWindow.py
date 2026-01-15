@@ -117,6 +117,7 @@ class Ui_MainWindow(object):
         self.table.setObjectName(u"table")
         self.table.setEnabled(False)
         self.table.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
+        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
         self.table.verticalHeader().setVisible(False)
 
@@ -125,6 +126,7 @@ class Ui_MainWindow(object):
         self.splitter.addWidget(self.verticalLayoutWidget)
         self.note_list = QListWidget(self.splitter)
         self.note_list.setObjectName(u"note_list")
+        self.note_list.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.note_list.setTextElideMode(Qt.TextElideMode.ElideNone)
         self.note_list.setResizeMode(QListView.ResizeMode.Adjust)
         self.note_list.setSpacing(3)
