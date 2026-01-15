@@ -38,6 +38,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.sheet_combo.currentIndexChanged.connect(self.__sheet_changed)
 
+        self.table.cellActivated.connect(self.__cell_activated)
+        self.note_list.itemActivated.connect(self.__note_activated)
+
     def __init_state(self, base_path: Optional[str]):
         self.setWindowTitle("TabFlash")
 
@@ -71,7 +74,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.file_combo.setCurrentIndex(0)
 
     def __mode_changed(self, mode_idx: int):
-        pass
+        self.__sheet_changed(sheet_idx=self.sheet_combo.currentIndex())
 
     def __file_changed(self, file_idx: int):
         self.sheet_combo.setEnabled(False)
@@ -100,6 +103,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except:
             pass
 
+    def __sheet_for_idx(self, idx: int):
+        assert self.spreadsheet is not None
+
+        # Note: The index is given as if no note sheets existed. Hence, the need
+        # for this quirky looking sheet selection.
+        sheet = None
+        for current_sheet in self.spreadsheet:
+            if is_notes_sheet(current_sheet):
+                continue
+            if idx == 0:
+                sheet = current_sheet
+                break
+
+            assert idx > 0
+            idx -= 1
+
+        assert sheet is not None
+
+        return sheet
+
     def __sheet_changed(self, sheet_idx: int):
         self.table.setEnabled(False)
         self.table.clear()
@@ -109,25 +132,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if sheet_idx < 0:
             return
 
-        assert self.spreadsheet is not None
-
-        # Note: The index is given as if no note sheets existed. Hence, the need
-        # for this quirky looking sheet selection.
-        sheet = None
-        for current_sheet in self.spreadsheet:
-            if is_notes_sheet(current_sheet):
-                continue
-            if sheet_idx == 0:
-                sheet = current_sheet
-                break
-
-            assert sheet_idx > 0
-            sheet_idx -= 1
-
-        assert sheet is not None
-
-        if sheet is None:
-            return
+        sheet = self.__sheet_for_idx(idx=sheet_idx)
 
         self.table.setEnabled(True)
 
@@ -159,6 +164,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
 
+        if self.mode_combo.currentIndex() == 1:
+            # Reveal mode -> clear text
+            for row in range(nrows):
+                for col in range(ncols):
+                    self.table.setItem(row, col, QTableWidgetItem())
+
         notes_name = sheet.name + "_Notes"
         if notes_name in self.spreadsheet.sheet_names():
             note_sheet = self.spreadsheet.sheet_by_name(notes_name)
@@ -167,6 +178,54 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.note_list.clear()
 
                 for current in note_sheet:
-                    self.note_list.addItem(QListWidgetItem(str(current[0])))
+                    note = (
+                        str(current[0]) if self.mode_combo.currentIndex() == 0 else ""
+                    )
+                    self.note_list.addItem(QListWidgetItem(note))
 
                 self.note_list.setVisible(True)
+
+    def __cell_activated(self, row: int, col: int):
+        if self.mode_combo.currentIndex() == 0:
+            # View mode -> do nothing
+            return
+
+        # Reveal mode
+        item = self.table.item(row, col)
+
+        if item is None:
+            return
+
+        if len(item.text()) == 0:
+            item.setText(
+                str(
+                    self.__sheet_for_idx(idx=self.sheet_combo.currentIndex())[
+                        row + 1,  # +1 to account for presence of headers in sheet
+                        col,
+                    ]
+                )
+            )
+        else:
+            item.setText("")
+
+    def __note_activated(self, item: QListWidgetItem):
+        if item is None:
+            return
+
+        row = self.note_list.indexFromItem(item).row()
+
+        if len(item.text()) == 0:
+            # Set note text
+            notes = self.spreadsheet.sheet_by_name(
+                self.__sheet_for_idx(idx=self.sheet_combo.currentIndex()).name
+                + "_Notes"
+            )
+            if notes is None or not is_notes_sheet(notes):
+                return
+            if row >= len(notes):
+                return
+
+            item.setText(str(notes[row, 0]))
+        else:
+            # Clear note text
+            item.setText("")
