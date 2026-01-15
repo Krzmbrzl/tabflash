@@ -152,7 +152,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"TabFlash", None))
         self.base_dir_label.setText(QCoreApplication.translate("MainWindow", u"Base dir", None))
         self.mode_combo.setItemText(0, QCoreApplication.translate("MainWindow", u"View", None))
-        self.mode_combo.setItemText(1, QCoreApplication.translate("MainWindow", u"Fill", None))
+        self.mode_combo.setItemText(1, QCoreApplication.translate("MainWindow", u"Reveal", None))
 
         self.mode_label.setText(QCoreApplication.translate("MainWindow", u"Mode", None))
         self.file_label.setText(QCoreApplication.translate("MainWindow", u"File", None))
