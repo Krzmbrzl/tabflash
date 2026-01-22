@@ -1,2 +1,3 @@
+pyside6
 pyexcel
 pyexcel-ods3
